@@ -3,12 +3,7 @@
 ## Installation
 
 
-Clone the repo:
-
-```bash
-git clone --depth 1 https://github.com/al77ex1/demo-metropolitan-museum-api
-cd demo-metropolitan-museum-api
-```
+Clone the repo: https://github.com/al77ex1/demo-metropolitan-museum-api
 
 Install the dependencies:
 

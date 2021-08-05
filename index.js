@@ -7,7 +7,7 @@ const europeanPaintingsID = 11;
 const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects`;
 const params = { departmentIds: europeanPaintingsID };
 const delay = 15;
-const amountElements = 100;
+const artworksCount = 100;
 
 /**
  * Get primary color
@@ -20,9 +20,8 @@ function getPrimaryColor( dominantColor ) {
   if (dominantColor[0] === dominantColor[1] && dominantColor[1] === dominantColor[2]) return 'none';
 
   // For color images
-  if (indexOfPrimaryColor === 0) return 'red';
-  if (indexOfPrimaryColor === 1) return 'green';
-  if (indexOfPrimaryColor === 2) return 'blue';
+  const colors = ['red', 'green', 'blue'];
+  return colors[indexOfPrimaryColor];
 }
 
 
@@ -49,8 +48,7 @@ async function getObjects( objectIDs ) {
         primaryColor: getPrimaryColor(dominantColor)
       });
     }
-
-      console.log(`Object processed. ID: ${id}`);
+    console.log(`Object processed. ID: ${id}`);
   }
   return result;
 }
@@ -63,7 +61,7 @@ async function getObjects( objectIDs ) {
     const departamentObjects = await axios.get(url, { params });
 
     // Short IDs for the first 100 id
-    const objectIDs = departamentObjects.data.objectIDs.slice(0, amountElements);
+    const objectIDs = departamentObjects.data.objectIDs.slice(0, artworksCount);
 
     // Get every object by id
     const result = await getObjects(objectIDs);
