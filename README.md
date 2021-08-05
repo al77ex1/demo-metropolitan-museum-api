@@ -16,7 +16,7 @@ Install the dependencies:
 yarn install
 ```
 
-## Parameters in index.ts file
+## Parameters in index.js file
 
 ```javascript
 const europeanPaintingsID = 11;
