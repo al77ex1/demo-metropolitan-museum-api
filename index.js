@@ -14,7 +14,7 @@ const amountElements = 100;
  * @param {array} dominantColor
  * @returns {string} color name
  */
-function getPrimaryColor( dominantColor: Array<number> ) {
+function getPrimaryColor( dominantColor ) {
   const indexOfPrimaryColor = dominantColor.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
   // For monochrome image
   if (dominantColor[0] === dominantColor[1] && dominantColor[1] === dominantColor[2]) return 'none';
@@ -31,7 +31,7 @@ function getPrimaryColor( dominantColor: Array<number> ) {
  * @param {array} objectIDs
  * @returns {array} 
  */
-async function getObjects( objectIDs: Array<number> ) {
+async function getObjects( objectIDs ) {
 
   const result = [];
   for (const id of objectIDs) {
