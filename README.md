@@ -36,4 +36,4 @@ yarn dev
 
 ## Result 
 
-See result in result.json file.
+See result in `result.json` file.
