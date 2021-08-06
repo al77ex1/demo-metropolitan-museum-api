@@ -6,7 +6,7 @@ import fs from 'fs';
 const europeanPaintingsID = 11; 
 const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects`;
 const params = { departmentIds: europeanPaintingsID };
-const delay = 15;
+const delay = 1000;
 const artworksCount = 100;
 const colors = ['red', 'green', 'blue'];
 
@@ -33,9 +33,12 @@ function getPrimaryColor( dominantColor ) {
 async function getObjects( objectIDs ) {
 
   const result = [];
+  let objectCount = 0;
   for (const id of objectIDs) {
-
-    await new Promise(resolve => setTimeout(resolve, delay));
+    if (objectCount === 75) {
+      await new Promise(resolve => setTimeout(resolve, delay));
+      objectCount = 0;
+    }
     const object = await axios.get(`${url}/${id}`);
 
     // Collect data to result array
@@ -49,6 +52,7 @@ async function getObjects( objectIDs ) {
       });
     }
     console.log(`Object processed. ID: ${id}`);
+    objectCount++;
   }
   return result;
 }
