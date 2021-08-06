@@ -36,7 +36,7 @@ async function getObjects( objectIDs ) {
   let objectCount = 0;
 
   // Write header
-  fs.writeFile('result.csv', `"objectID";"primaryImageSmall";"dominantColor";"primaryColor"\n`, function (err) {
+  fs.writeFile('result.csv', `"objectID";"primaryImageSmall";"dominantColor";"primaryColor"\n`, (err) => {
     if (err) throw err;
   });
 
@@ -49,14 +49,13 @@ async function getObjects( objectIDs ) {
     }
 
     const object = axios.get(`${url}/${id}`)
-      .then(async function(object){
+      .then( async (object) => {
 
       // Collect data to result array
         if (object.data.primaryImageSmall.length) {
           const dominantColor = await getColorFromURL(object.data.primaryImageSmall);
           fs.appendFile('result.csv', 
-            `"${id}";"${object.data.primaryImageSmall}";"${dominantColor.toString()}";"${getPrimaryColor(dominantColor)}"\n`, 
-            function (err) {
+            `"${id}";"${object.data.primaryImageSmall}";"${dominantColor.toString()}";"${getPrimaryColor(dominantColor)}"\n`, (err) => {
               if (err) throw err;
           });
           console.log(`Object processed. ID: ${id}`);
