@@ -52,7 +52,7 @@ async function getObjects( objectIDs ) {
         console.log(`Object processed. ID: ${id}`);
 
         resolve()
-      }, 1000 * Math.floor(i/75))
+      }, delay * Math.floor(i/75))
     )
 
     return true;
