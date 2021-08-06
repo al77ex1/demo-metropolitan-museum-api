@@ -33,39 +33,33 @@ function getPrimaryColor( dominantColor ) {
 async function getObjects( objectIDs ) {
 
   const result = [];
-  let objectCount = 0;
 
-  // Write header
-  fs.writeFile('result.csv', `"objectID";"primaryImageSmall";"dominantColor";"primaryColor"\n`, (err) => {
-    if (err) throw err;
-  });
+  const promises = objectIDs.map(async (id, i) => {
+    await new Promise(resolve =>
+      setTimeout(async () => {
+        const object = await axios.get(`${url}/${id}`);
 
-  for (const id of objectIDs) {
-    
-    // Delay
-    if (objectCount === 75) {
-      await new Promise(resolve => setTimeout(resolve, delay));
-      objectCount = 0;
-    }
-
-    const object = axios.get(`${url}/${id}`)
-      .then( async (object) => {
-
-      // Collect data to result array
+        // Collect data to result array
         if (object.data.primaryImageSmall.length) {
           const dominantColor = await getColorFromURL(object.data.primaryImageSmall);
-          fs.appendFile('result.csv', 
-            `"${id}";"${object.data.primaryImageSmall}";"${dominantColor.toString()}";"${getPrimaryColor(dominantColor)}"\n`, (err) => {
-              if (err) throw err;
+          result.push({ 
+            objectID: id, 
+            primaryImageSmall: object.data.primaryImageSmall,
+            dominantColor,
+            primaryColor: getPrimaryColor(dominantColor)
           });
-          console.log(`Object processed. ID: ${id}`);
         }
+        console.log(`Object processed. ID: ${id}`);
 
-      });
+        resolve()
+      }, 1000 * Math.floor(i/75))
+    )
 
-    objectCount++;
-  }
-  return true;
+    return true;
+  });
+  await Promise.all(promises)
+
+  return result;
 }
 
 
@@ -79,7 +73,13 @@ async function getObjects( objectIDs ) {
     const objectIDs = departamentObjects.data.objectIDs.slice(0, artworksCount);
 
     // Get every object by id
-    await getObjects(objectIDs);
+    const result = await getObjects(objectIDs);
+
+    // Write result
+    fs.writeFile('result.json', JSON.stringify(result), function (err) {
+      if (err) return console.log(err);
+      console.log('See file: result.json');
+    });
 
   } catch (error) {
     console.log(error); // this is the main part. Use the response property from the error object
