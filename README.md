@@ -17,7 +17,7 @@ yarn install
 const europeanPaintingsID = 11;
 const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects`;
 const params = { departmentIds: europeanPaintingsID };
-const delay = 15;
+const delay = 1000;
 const artworksCount = 100;
 ```
 
