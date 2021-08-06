@@ -34,27 +34,39 @@ async function getObjects( objectIDs ) {
 
   const result = [];
   let objectCount = 0;
+
+  // Write header
+  fs.writeFile('result.csv', `"objectID";"primaryImageSmall";"dominantColor";"primaryColor"\n`, function (err) {
+    if (err) throw err;
+  });
+
   for (const id of objectIDs) {
+    
+    // Delay
     if (objectCount === 75) {
       await new Promise(resolve => setTimeout(resolve, delay));
       objectCount = 0;
     }
-    const object = await axios.get(`${url}/${id}`);
 
-    // Collect data to result array
-    if (object.data.primaryImageSmall.length) {
-      const dominantColor = await getColorFromURL(object.data.primaryImageSmall);
-      result.push({ 
-        objectID: id, 
-        primaryImageSmall: object.data.primaryImageSmall,
-        dominantColor,
-        primaryColor: getPrimaryColor(dominantColor)
+    const object = axios.get(`${url}/${id}`)
+      .then(async function(object){
+
+      // Collect data to result array
+        if (object.data.primaryImageSmall.length) {
+          const dominantColor = await getColorFromURL(object.data.primaryImageSmall);
+          fs.appendFile('result.csv', 
+            `"${id}";"${object.data.primaryImageSmall}";"${dominantColor.toString()}";"${getPrimaryColor(dominantColor)}"\n`, 
+            function (err) {
+              if (err) throw err;
+          });
+          console.log(`Object processed. ID: ${id}`);
+        }
+
       });
-    }
-    console.log(`Object processed. ID: ${id}`);
+
     objectCount++;
   }
-  return result;
+  return true;
 }
 
 
@@ -68,13 +80,7 @@ async function getObjects( objectIDs ) {
     const objectIDs = departamentObjects.data.objectIDs.slice(0, artworksCount);
 
     // Get every object by id
-    const result = await getObjects(objectIDs);
-
-    // Write result
-    fs.writeFile('result.json', JSON.stringify(result), function (err) {
-      if (err) return console.log(err);
-      console.log('See file: result.json');
-    });
+    await getObjects(objectIDs);
 
   } catch (error) {
     console.log(error); // this is the main part. Use the response property from the error object

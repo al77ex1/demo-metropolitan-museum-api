@@ -5,6 +5,6 @@ node_modules
 yarn-error.log
 
 # Result file
-result.json
+result.csv
 
 .idea
