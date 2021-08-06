@@ -33,27 +33,32 @@ function getPrimaryColor( dominantColor ) {
 async function getObjects( objectIDs ) {
 
   const result = [];
-  let objectCount = 0;
-  for (const id of objectIDs) {
-    if (objectCount === 75) {
-      await new Promise(resolve => setTimeout(resolve, delay));
-      objectCount = 0;
-    }
-    const object = await axios.get(`${url}/${id}`);
 
-    // Collect data to result array
-    if (object.data.primaryImageSmall.length) {
-      const dominantColor = await getColorFromURL(object.data.primaryImageSmall);
-      result.push({ 
-        objectID: id, 
-        primaryImageSmall: object.data.primaryImageSmall,
-        dominantColor,
-        primaryColor: getPrimaryColor(dominantColor)
-      });
-    }
-    console.log(`Object processed. ID: ${id}`);
-    objectCount++;
-  }
+  const promises = objectIDs.map(async (id, i) => {
+    await new Promise(resolve =>
+      setTimeout(async () => {
+        const object = await axios.get(`${url}/${id}`);
+
+        // Collect data to result array
+        if (object.data.primaryImageSmall.length) {
+          const dominantColor = await getColorFromURL(object.data.primaryImageSmall);
+          result.push({ 
+            objectID: id, 
+            primaryImageSmall: object.data.primaryImageSmall,
+            dominantColor,
+            primaryColor: getPrimaryColor(dominantColor)
+          });
+        }
+        console.log(`Object processed. ID: ${id}`);
+
+        resolve()
+      }, 1000 * Math.floor(i/75))
+    )
+
+    return true;
+  });
+  await Promise.all(promises)
+
   return result;
 }
 
