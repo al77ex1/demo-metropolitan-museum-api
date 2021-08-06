@@ -8,6 +8,7 @@ const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects`;
 const params = { departmentIds: europeanPaintingsID };
 const delay = 15;
 const artworksCount = 100;
+const colors = ['red', 'green', 'blue'];
 
 /**
  * Get primary color
@@ -20,7 +21,6 @@ function getPrimaryColor( dominantColor ) {
   if (dominantColor[0] === dominantColor[1] && dominantColor[1] === dominantColor[2]) return 'none';
 
   // For color images
-  const colors = ['red', 'green', 'blue'];
   return colors[indexOfPrimaryColor];
 }
 

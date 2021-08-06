@@ -18,7 +18,7 @@ const europeanPaintingsID = 11;
 const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects`;
 const params = { departmentIds: europeanPaintingsID };
 const delay = 15;
-const amountElements = 100;
+const artworksCount = 100;
 ```
 
 ## Commands
