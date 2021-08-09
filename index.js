@@ -3,12 +3,11 @@ import { getColorFromURL } from 'color-thief-node';
 import fs from 'fs';
 
 // Parameters
-const europeanPaintingsID = 11; 
-const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects`;
-const params = { departmentIds: europeanPaintingsID };
-const delay = 1000;
-const artworksCount = 100;
-const colors = ['red', 'green', 'blue'];
+const EUROPEAN_PAINTINGS_ID = 11; 
+const METMUSEUM_OBJECTS_URL = `https://collectionapi.metmuseum.org/public/collection/v1/objects`;
+const REQUESTS_PER_SECOND = 75;
+const ARTWORKS_COUNT = 100;
+const COLORS = ['red', 'green', 'blue'];
 
 /**
  * Get primary color
@@ -21,7 +20,7 @@ function getPrimaryColor( dominantColor ) {
   if (dominantColor[0] === dominantColor[1] && dominantColor[1] === dominantColor[2]) return 'none';
 
   // For color images
-  return colors[indexOfPrimaryColor];
+  return COLORS[indexOfPrimaryColor];
 }
 
 
@@ -37,7 +36,7 @@ async function getObjects( objectIDs ) {
   const promises = objectIDs.map(async (id, i) => {
     await new Promise(resolve =>
       setTimeout(async () => {
-        const object = await axios.get(`${url}/${id}`);
+        const object = await axios.get(`${METMUSEUM_OBJECTS_URL}/${id}`);
 
         // Collect data to result array
         if (object.data.primaryImageSmall.length) {
@@ -52,7 +51,7 @@ async function getObjects( objectIDs ) {
         console.log(`Object processed. ID: ${id}`);
 
         resolve()
-      }, delay * Math.floor(i/75))
+      }, 1000 * Math.floor(i/REQUESTS_PER_SECOND))
     )
 
     return true;
@@ -67,10 +66,10 @@ async function getObjects( objectIDs ) {
   try {
 
     // Get objects by department
-    const departamentObjects = await axios.get(url, { params });
+    const departamentObjects = await axios.get(METMUSEUM_OBJECTS_URL, { params: { departmentIds: EUROPEAN_PAINTINGS_ID } });
 
     // Short IDs for the first 100 id
-    const objectIDs = departamentObjects.data.objectIDs.slice(0, artworksCount);
+    const objectIDs = departamentObjects.data.objectIDs.slice(0, ARTWORKS_COUNT);
 
     // Get every object by id
     const result = await getObjects(objectIDs);
