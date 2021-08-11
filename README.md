@@ -14,11 +14,11 @@ yarn install
 ## Parameters in index.js file
 
 ```javascript
-const europeanPaintingsID = 11;
-const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects`;
-const params = { departmentIds: europeanPaintingsID };
-const delay = 1000;
-const artworksCount = 100;
+const EUROPEAN_PAINTINGS_ID = 11; 
+const METMUSEUM_OBJECTS_URL = `https://collectionapi.metmuseum.org/public/collection/v1/objects`;
+const REQUESTS_PER_SECOND = 75;
+const ARTWORKS_COUNT = 100;
+const COLORS = ['red', 'green', 'blue'];
 ```
 
 ## Commands
