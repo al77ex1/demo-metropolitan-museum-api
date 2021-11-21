@@ -33,7 +33,7 @@ yarn dev
 
 See result in `result.json` file.
 
-## Requirements
+## Task
 
 The Metropolitan Museum has a great API which allows you to get data about all the artwork
 collections in their possession.
