@@ -72,6 +72,5 @@ that do not have images. You should handle those edge cases.
 ● Be frugal: A sample of 100-200 artworks in the department is fine. No need to process
 each and every item. Also notice that objects have small and large images, feel free to
 only process the small ones.
-Good luck. And most importantly, have fun! If you have any questions please don’t hesitate to
-contact us. We will gladly help.
+Good luck. And most importantly, have fun!
 
